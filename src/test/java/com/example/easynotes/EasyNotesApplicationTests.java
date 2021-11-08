@@ -22,6 +22,8 @@ public class EasyNotesApplicationTests {
 
     @DynamicPropertySource
     static void mysqlProperties(DynamicPropertyRegistry registry) {
+        System.out.println("BEFORE ALL");
+
         registry.add("spring.datasource.url", mysql::getJdbcUrl);
         registry.add("spring.datasource.password", mysql::getPassword);
         registry.add("spring.datasource.username", mysql::getUsername);
