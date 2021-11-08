@@ -19,6 +19,8 @@ public class EasyNotesApplication {
 
         Map<String, Object> props = new HashMap<>();
         props.put("spring.datasource.url", mysql.getJdbcUrl());
+        props.put("spring.datasource.username", "test");
+        props.put("spring.datasource.password", "test");
         app.setDefaultProperties(props);
 
         app.run(args);
