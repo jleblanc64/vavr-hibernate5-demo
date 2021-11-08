@@ -11,7 +11,7 @@ To run the tests: `mvn clean test`
 
 2) Test the API:
 
-curl -X POST localhost:46353/api/notes \
+curl -X POST localhost:8080/api/notes \
     -H 'Content-Type: application/json' \
     -d '{"title":"a","content":"b"}'
 
