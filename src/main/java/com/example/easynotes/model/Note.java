@@ -35,6 +35,9 @@ public class Note {
     @LastModifiedDate
     private Date updatedAt;
 
+    @Column(nullable = true)
+    private String contentOpt;
+
     public Long getId() {
         return id;
     }
@@ -73,6 +76,14 @@ public class Note {
 
     public void setUpdatedAt(Date updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public String getContentOpt() {
+        return contentOpt;
+    }
+
+    public void setContentOpt(String contentOpt) {
+        this.contentOpt = contentOpt;
     }
 
 }
