@@ -1,6 +1,9 @@
 # hibernate
 hibernate
 
+To build: `mvn -DskipTests=true clean package`
+To run the tests: `mvn clean test`
+
 1) Run `EasyNotesApplicationTests`
 
 2) Test the API:
