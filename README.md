@@ -15,7 +15,7 @@ curl -X POST localhost:8080/api/notes \
     -H 'Content-Type: application/json' \
     -d '{"title":"a","content":"b"}'
 
-curl localhost:46353/api/notes
+curl localhost:8080/api/notes
 
 curl -X POST localhost:46353/api/notes \
     -H 'Content-Type: application/json' \
