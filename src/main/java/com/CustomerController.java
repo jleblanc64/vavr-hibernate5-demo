@@ -24,14 +24,14 @@ public class CustomerController {
     }
 
     @GetMapping("/customers/{id}")
-    public Customer getCustomerById(@PathVariable(value = "id") Long noteId) {
-        return customerRepository.findById(noteId).orElseThrow(NotFoundException::new);
+    public Customer getCustomerById(@PathVariable(value = "id") Long customerId) {
+        return customerRepository.findById(customerId).orElseThrow(NotFoundException::new);
     }
 
     @DeleteMapping("/customers/{id}")
-    public ResponseEntity<?> deleteCustomer(@PathVariable(value = "id") Long noteId) {
-        Customer note = customerRepository.findById(noteId).orElseThrow(NotFoundException::new);
-        customerRepository.delete(note);
+    public ResponseEntity<?> deleteCustomer(@PathVariable(value = "id") Long customerId) {
+        Customer customer = customerRepository.findById(customerId).orElseThrow(NotFoundException::new);
+        customerRepository.delete(customer);
 
         return ResponseEntity.ok().build();
     }
