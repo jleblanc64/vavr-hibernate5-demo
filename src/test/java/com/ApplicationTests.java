@@ -70,5 +70,9 @@ public class ApplicationTests {
         resp = restTemplate.getForObject(url, String.class);
         root = objectMapper.readTree(resp);
         assertThat(root.size()).isEqualTo(0);
+
+        // GET by ID should respond 404 NOT FOUND
+        int httpCode = restTemplate.getForEntity(url + "/" + id, String.class).getStatusCodeValue();
+        assertThat(httpCode).isEqualTo(404);
     }
 }

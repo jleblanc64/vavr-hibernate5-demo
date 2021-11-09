@@ -2,11 +2,9 @@ package com;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
 @Table(name = "customers")
-@EntityListeners(AuditingEntityListener.class)
 public class Customer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
