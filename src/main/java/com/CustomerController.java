@@ -4,6 +4,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,5 +36,9 @@ public class CustomerController {
         customerRepository.delete(customer);
 
         return ResponseEntity.ok().build();
+    }
+
+    @ResponseStatus(value = HttpStatus.NOT_FOUND)
+    private static class NotFoundException extends RuntimeException {
     }
 }
