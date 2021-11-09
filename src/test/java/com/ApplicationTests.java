@@ -36,22 +36,39 @@ public class ApplicationTests {
 
     @Test
     public void contextLoads() throws JsonProcessingException {
+        String url = "http://localhost:" + port + "/customers";
+
+        // POST customer
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<String> request = new HttpEntity<>("{\"name\":\"a\"}", headers);
-
-        String url = "http://localhost:" + port + "/customers";
         String resp = restTemplate.postForObject(url, request, String.class);
 
+        // extract ID from created customer
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode root = objectMapper.readTree(resp);
-        String title = root.path("name").textValue();
-        assertThat(title).isEqualTo("a");
+        long id = root.path("id").longValue();
 
+        // GET by ID
+        resp = restTemplate.getForObject(url + "/" + id, String.class);
+        root = objectMapper.readTree(resp);
+        String name = root.path("name").textValue();
+        assertThat(name).isEqualTo("a");
+
+        // LIST
         resp = restTemplate.getForObject(url, String.class);
         root = objectMapper.readTree(resp);
+        assertThat(root.size()).isEqualTo(1);
 
-        title = root.path(0).path("name").textValue();
-        assertThat(title).isEqualTo("a");
+        name = root.path(0).path("name").textValue();
+        assertThat(name).isEqualTo("a");
+
+        // DELETE
+        restTemplate.delete(url + "/" + id, request, String.class);
+
+        // LIST
+        resp = restTemplate.getForObject(url, String.class);
+        root = objectMapper.readTree(resp);
+        assertThat(root.size()).isEqualTo(0);
     }
 }
