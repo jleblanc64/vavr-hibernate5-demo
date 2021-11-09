@@ -23,7 +23,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class EasyNotesApplicationTests {
 
-
     @LocalServerPort
     private int port;
 
@@ -32,8 +31,6 @@ public class EasyNotesApplicationTests {
 
     @DynamicPropertySource
     static void mysqlProperties(DynamicPropertyRegistry registry) {
-        System.out.println("BEFORE ALL");
-
         registry.add("spring.datasource.url", mysql::getJdbcUrl);
         registry.add("spring.datasource.password", mysql::getPassword);
         registry.add("spring.datasource.username", mysql::getUsername);
@@ -43,15 +40,13 @@ public class EasyNotesApplicationTests {
     private TestRestTemplate restTemplate;
 
     @Test
-    public void contextLoads() throws InterruptedException, JsonProcessingException {
-        String url = "http://localhost:" + port + "/api/notes";
-        System.out.println(url);
-
+    public void contextLoads() throws JsonProcessingException {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<String> request =
                 new HttpEntity<>("{\"title\":\"a\",\"content\":\"b\"}", headers);
 
+        String url = "http://localhost:" + port + "/api/notes";
         String resp = restTemplate.postForObject(url, request, String.class);
 
         ObjectMapper objectMapper = new ObjectMapper();
@@ -65,5 +60,4 @@ public class EasyNotesApplicationTests {
         title = root.path(0).path("title").textValue();
         assertThat(title).isEqualTo("a");
     }
-
 }
