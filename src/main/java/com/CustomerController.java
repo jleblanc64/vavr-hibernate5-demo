@@ -9,28 +9,28 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("")
+@RequestMapping("/customers")
 public class CustomerController {
 
     @Autowired
     CustomerRepository customerRepository;
 
-    @GetMapping("/customers")
+    @GetMapping
     public List<Customer> getCustomers() {
         return customerRepository.findAll();
     }
 
-    @PostMapping("/customers")
+    @PostMapping
     public Customer createCustomer(@Valid @RequestBody Customer customer) {
         return customerRepository.save(customer);
     }
 
-    @GetMapping("/customers/{id}")
+    @GetMapping("/{id}")
     public Customer getCustomerById(@PathVariable(value = "id") Long customerId) {
         return customerRepository.findById(customerId).orElseThrow(NotFoundException::new);
     }
 
-    @DeleteMapping("/customers/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteCustomer(@PathVariable(value = "id") Long customerId) {
         Customer customer = customerRepository.findById(customerId).orElseThrow(NotFoundException::new);
         customerRepository.delete(customer);
