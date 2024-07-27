@@ -3,6 +3,7 @@ package com.demo.lib_override;
 import com.demo.functional.ListF;
 import com.demo.lib_override.sub.SpringGet;
 import com.demo.lib_override.sub.SpringSet;
+import com.demo.lib_override.sub.SpringType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.SneakyThrows;
@@ -157,6 +158,7 @@ public class OverrideLibs {
 
         SpringGet.override();
         SpringSet.override();
+        SpringType.override();
 
         // fill nameToMethod
         nameToMethod = methods.toMap(m -> m.name, m -> m.method);

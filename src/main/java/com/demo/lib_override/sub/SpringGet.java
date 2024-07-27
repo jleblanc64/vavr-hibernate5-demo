@@ -6,8 +6,8 @@ import lombok.SneakyThrows;
 import org.hibernate.property.access.spi.GetterFieldImpl;
 
 import java.lang.reflect.Field;
+import java.util.Optional;
 
-import static com.demo.functional.Functor.print;
 import static com.demo.lib_override.FieldMocked.getRefl;
 import static com.demo.lib_override.OverrideLibs.mSelf;
 
@@ -17,19 +17,16 @@ public class SpringGet {
             var args = argsS.args;
             var self = argsS.self;
 
-            return getOver((GetterFieldImpl) self, args[0]);
+            return get((GetterFieldImpl) self, args[0]);
         });
     }
 
     @SneakyThrows
-    public static ValueWrapper getOver(GetterFieldImpl g, Object owner) {
+    public static ValueWrapper get(GetterFieldImpl g, Object owner) {
         var field = (Field) getRefl(g, "field");
-        print("get " + field);
-
-        if (field.equals("")) {
-            var v = field.get(owner);
-            if (v instanceof OptionF)
-                return new ValueWrapper(((OptionF) v).l());
+        if (field.getName().equals("name")) {
+            var v = (Optional<String>) field.get(owner);
+            return new ValueWrapper(new OptionF<>(v).get());
         }
 
         return null;

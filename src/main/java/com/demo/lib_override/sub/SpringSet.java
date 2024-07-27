@@ -6,7 +6,6 @@ import org.hibernate.property.access.spi.SetterFieldImpl;
 
 import java.lang.reflect.Field;
 
-import static com.demo.functional.Functor.print;
 import static com.demo.functional.OptionF.o;
 import static com.demo.lib_override.FieldMocked.getRefl;
 import static com.demo.lib_override.OverrideLibs.mSelf;
@@ -17,17 +16,15 @@ public class SpringSet {
             var args = argsS.args;
             var self = argsS.self;
 
-            return setOver((SetterFieldImpl) self, args[0], args[1]);
+            return set((SetterFieldImpl) self, args[0], args[1]);
         });
     }
 
     @SneakyThrows
-    public static Object setOver(SetterFieldImpl s, Object target, Object value) {
+    public static Object set(SetterFieldImpl s, Object target, Object value) {
         var field = (Field) getRefl(s, "field");
-        print("set " + field);
-
-        if (field.equals("")) {
-            field.set(target, o(value));
+        if (field.getName().equals("name")) {
+            field.set(target, o(value).opt());
             return new ValueWrapper(null);
         }
 
