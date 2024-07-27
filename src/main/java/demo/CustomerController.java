@@ -1,4 +1,4 @@
-package com;
+package demo;
 
 import javax.validation.Valid;
 import java.util.List;

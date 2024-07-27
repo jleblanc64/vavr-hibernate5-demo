@@ -1,4 +1,4 @@
-package com;
+package demo;
 
 import org.testcontainers.containers.MySQLContainer;
 

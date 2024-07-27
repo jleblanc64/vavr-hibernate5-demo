@@ -1,4 +1,4 @@
-package com;
+package demo;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
