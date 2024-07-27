@@ -1,8 +1,7 @@
 package com.demo.functional;
 
 import java.math.BigDecimal;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.*;
 
 import static com.demo.functional.OptionF.emptyO;
@@ -113,6 +112,15 @@ public class Functor {
             else
                 i++;
         }
+    }
+
+    public static <T> Set<T> minus(Set<T> s, Collection<T> c) {
+        Set<T> cSet = new HashSet<>(c);
+        Set<T> diff = new HashSet<>();
+        for (T t : s)
+            if (!cSet.contains(t))
+                diff.add(t);
+        return diff;
     }
 
     public static <T> OptionF<T> tryF(ThrowingSupplier<T> f) {

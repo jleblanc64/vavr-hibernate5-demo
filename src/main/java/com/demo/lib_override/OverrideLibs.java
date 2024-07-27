@@ -1,6 +1,8 @@
 package com.demo.lib_override;
 
+import com.demo.functional.Functor;
 import com.demo.functional.ListF;
+import com.demo.lib_override.sub.Jackson;
 import com.demo.lib_override.sub.SpringGet;
 import com.demo.lib_override.sub.SpringSet;
 import com.demo.lib_override.sub.SpringType;
@@ -125,7 +127,7 @@ public class OverrideLibs {
         methods.add(new MethodDesc(name, method, clazz));
     }
 
-    public static void mSelf(Class<?> clazz, String name, Function<ArgsSelf, Object> method) {
+    public static void mSelf(Class<?> clazz, String name, Functor.ThrowingFunction<ArgsSelf, Object> method) {
         methodsSelf.add(new MethodDescSelf(name, method, clazz));
     }
 
@@ -159,6 +161,7 @@ public class OverrideLibs {
         SpringGet.override();
         SpringSet.override();
         SpringType.override();
+        Jackson.override();
 
         // fill nameToMethod
         nameToMethod = methods.toMap(m -> m.name, m -> m.method);

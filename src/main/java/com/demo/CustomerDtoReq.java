@@ -6,13 +6,11 @@ import lombok.Setter;
 
 import java.util.Optional;
 
-import static java.util.Optional.empty;
-
 @Getter
 @Setter
 @NoArgsConstructor
 public class CustomerDtoReq {
-    private Optional<String> name = empty();
+    private Optional<String> name;
 
     public Customer toCustomer() {
         var c = new Customer();
