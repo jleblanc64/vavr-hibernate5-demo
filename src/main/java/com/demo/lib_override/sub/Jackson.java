@@ -2,7 +2,6 @@ package com.demo.lib_override.sub;
 
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.collect.Sets;
 import org.json.JSONObject;
 import org.testcontainers.shaded.org.apache.commons.io.IOUtils;
 
@@ -43,7 +42,7 @@ public class Jackson {
         var jo = new JSONObject(s);
 
         var fields = f(clazz.getDeclaredFields()).filter(f -> Optional.class.equals(f.getType())).mapS(Field::getName);
-        var fieldsJo = Sets.newHashSet(jo.keys());
+        var fieldsJo = jo.keySet();
         var missingFields = minus(fields, fieldsJo);
 
         missingFields.forEach(f -> jo.put(f, JSONObject.NULL));
