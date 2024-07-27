@@ -1,16 +1,21 @@
 package com.demo;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.*;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.http.*;
-import org.springframework.test.context.*;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.MySQLContainer;
-import org.testcontainers.junit.jupiter.*;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -19,7 +24,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class ApplicationTests {
 
     @LocalServerPort
-    private int port;
+    int port;
 
     @Container
     static MySQLContainer<?> mysql = new MySQLContainer<>("mysql:5.5").withDatabaseName("database").withPassword("test").withPassword("test");
@@ -32,16 +37,16 @@ public class ApplicationTests {
     }
 
     @Autowired
-    private TestRestTemplate restTemplate;
+    TestRestTemplate restTemplate;
 
     @Test
     public void contextLoads() throws JsonProcessingException {
-        String url = "http://localhost:" + port + "/customers";
+        var url = "http://localhost:" + port + "/customers";
 
         // POST customer
-        HttpHeaders headers = new HttpHeaders();
+        var headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-        HttpEntity<String> request = new HttpEntity<>("{\"name\":\"a\"}", headers);
+        var request = new HttpEntity<>("{\"name\":\"a\"}", headers);
         String resp = restTemplate.postForObject(url, request, String.class);
 
         // extract ID from created customer
