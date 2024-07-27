@@ -1,8 +1,13 @@
 package com.demo;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 
+@Getter
+@Setter
 @Entity
 @Table(name = "customers")
 public class Customer {
@@ -12,20 +17,4 @@ public class Customer {
 
     @NotBlank
     private String name;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
 }
