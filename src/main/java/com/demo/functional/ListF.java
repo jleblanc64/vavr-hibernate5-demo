@@ -4,8 +4,6 @@ import com.google.common.collect.Lists;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.SneakyThrows;
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 import java.util.*;
 import java.util.concurrent.ExecutionException;
@@ -215,14 +213,6 @@ public class ListF<T> implements IListF<T> {
 
     public static <T> ListF<T> empty() {
         return f(new ArrayList<>());
-    }
-
-    public static ListF<JSONObject> f(JSONArray ja) {
-        ListF<JSONObject> l = empty();
-        for (int i = 0; i < ja.length(); i++)
-            l.add(ja.getJSONObject(i));
-
-        return l;
     }
 
     public T max(Comparator<? super T> comparator) {

@@ -2,7 +2,7 @@ package com.demo.lib_override.sub;
 
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.json.JSONObject;
+import com.google.gson.JsonParser;
 import org.testcontainers.shaded.org.apache.commons.io.IOUtils;
 
 import java.io.InputStream;
@@ -39,13 +39,13 @@ public class Jackson {
     }
 
     public static String fillMissingFields(String s, Class<?> clazz) {
-        var jo = new JSONObject(s);
+        var jo = JsonParser.parseString(s).getAsJsonObject();
 
         var fields = f(clazz.getDeclaredFields()).filter(f -> Optional.class.equals(f.getType())).mapS(Field::getName);
         var fieldsJo = jo.keySet();
         var missingFields = minus(fields, fieldsJo);
 
-        missingFields.forEach(f -> jo.put(f, JSONObject.NULL));
+        missingFields.forEach(f -> jo.addProperty(f, (String) null));
         return jo.toString();
     }
 }
