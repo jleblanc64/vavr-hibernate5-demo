@@ -1,12 +1,13 @@
 package com.demo;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
+
 import javax.validation.Valid;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import static com.demo.functional.ListF.f;
 
 @RestController
 @RequestMapping("/customers")
@@ -16,26 +17,26 @@ public class CustomerController {
     CustomerRepository customerRepository;
 
     @GetMapping
-    public List<Customer> getCustomers() {
-        return customerRepository.findAll();
+    public List<CustomerDtoResp> getCustomers() {
+        return f(customerRepository.findAll()).map(CustomerDtoResp::new);
     }
 
     @PostMapping
-    public Customer createCustomer(@Valid @RequestBody Customer customer) {
-        return customerRepository.save(customer);
+    public CustomerDtoResp createCustomer(@Valid @RequestBody CustomerDtoReq customer) {
+        var c = customerRepository.save(customer.toCustomer());
+        return new CustomerDtoResp(c);
     }
 
     @GetMapping("/{id}")
-    public Customer getCustomerById(@PathVariable(value = "id") Long customerId) {
-        return customerRepository.findById(customerId).orElseThrow(NotFoundException::new);
+    public CustomerDtoResp getCustomerById(@PathVariable(value = "id") Long customerId) {
+        var c = customerRepository.findById(customerId).orElseThrow(NotFoundException::new);
+        return new CustomerDtoResp(c);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteCustomer(@PathVariable(value = "id") Long customerId) {
+    public void deleteCustomer(@PathVariable(value = "id") Long customerId) {
         Customer customer = customerRepository.findById(customerId).orElseThrow(NotFoundException::new);
         customerRepository.delete(customer);
-
-        return ResponseEntity.ok().build();
     }
 
     @ResponseStatus(value = HttpStatus.NOT_FOUND)

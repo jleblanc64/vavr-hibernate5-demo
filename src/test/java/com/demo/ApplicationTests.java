@@ -47,7 +47,7 @@ public class ApplicationTests {
         var headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         var request = new HttpEntity<>("{\"name\":\"a\"}", headers);
-        String resp = restTemplate.postForObject(url, request, String.class);
+        var resp = restTemplate.postForObject(url, request, String.class);
 
         // extract ID from created customer
         ObjectMapper objectMapper = new ObjectMapper();
@@ -57,7 +57,7 @@ public class ApplicationTests {
         // GET by ID
         resp = restTemplate.getForObject(url + "/" + id, String.class);
         root = objectMapper.readTree(resp);
-        String name = root.path("name").textValue();
+        var name = root.path("name").textValue();
         assertThat(name).isEqualTo("a");
 
         // LIST
@@ -79,5 +79,12 @@ public class ApplicationTests {
         // GET by ID should respond 404 NOT FOUND
         int httpCode = restTemplate.getForEntity(url + "/" + id, String.class).getStatusCodeValue();
         assertThat(httpCode).isEqualTo(404);
+
+        // empty name
+        request = new HttpEntity<>("{}", headers);
+        resp = restTemplate.postForObject(url, request, String.class);
+        root = objectMapper.readTree(resp);
+        name = root.path("name").textValue();
+        assertThat(name).isEqualTo("default");
     }
 }
