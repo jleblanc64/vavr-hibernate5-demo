@@ -1,4 +1,4 @@
-package demo;
+package com.demo;
 
 import org.springframework.web.bind.annotation.*;
 
