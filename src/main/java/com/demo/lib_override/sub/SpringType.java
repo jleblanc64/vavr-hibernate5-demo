@@ -6,9 +6,8 @@ import org.hibernate.mapping.Table;
 import org.hibernate.type.StringType;
 import org.hibernate.type.Type;
 
-import java.util.List;
-
 import static com.demo.lib_override.FieldMocked.getRefl;
+import static com.demo.lib_override.FieldMocked.getReflL;
 import static com.demo.lib_override.OverrideLibs.mSelf;
 
 public class SpringType {
@@ -21,8 +20,8 @@ public class SpringType {
 
 
     public static Type getType(SimpleValue s) {
-        var table = (Table) getRefl(s, "table");
-        var columns = (List<Column>) getRefl(s, "columns");
+        var table = getRefl(s, "table", Table.class);
+        var columns = getReflL(s, "columns", Column.class);
         if (table.getName().equals("customers") && columns.get(0).getName().equals("name"))
             return new StringType();
 

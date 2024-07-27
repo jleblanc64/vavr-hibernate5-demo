@@ -22,7 +22,7 @@ public class SpringSet {
 
     @SneakyThrows
     public static Object set(SetterFieldImpl s, Object target, Object value) {
-        var field = (Field) getRefl(s, "field");
+        var field = getRefl(s, "field", Field.class);
         if (field.getName().equals("name")) {
             field.set(target, o(value).opt());
             return new ValueWrapper(null);

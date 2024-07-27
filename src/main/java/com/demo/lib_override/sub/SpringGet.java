@@ -23,7 +23,7 @@ public class SpringGet {
 
     @SneakyThrows
     public static ValueWrapper get(GetterFieldImpl g, Object owner) {
-        var field = (Field) getRefl(g, "field");
+        var field = getRefl(g, "field", Field.class);
         if (field.getName().equals("name")) {
             var v = (Optional<String>) field.get(owner);
             return new ValueWrapper(new OptionF<>(v).get());
