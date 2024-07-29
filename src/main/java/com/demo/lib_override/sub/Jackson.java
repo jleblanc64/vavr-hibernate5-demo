@@ -6,6 +6,7 @@ import com.google.gson.JsonParser;
 import org.testcontainers.shaded.org.apache.commons.io.IOUtils;
 
 import java.io.InputStream;
+import java.io.Reader;
 import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Optional;
@@ -24,10 +25,17 @@ public class Jackson {
             if (args == null || args.length != 2)
                 return null;
 
-            if (!(args[0] instanceof InputStream && args[1] instanceof JavaType))
+            if (!(args[1] instanceof JavaType))
                 return null;
 
-            var in = (InputStream) args[0];
+            InputStream in;
+            if (args[0] instanceof InputStream)
+                in = (InputStream) args[0];
+            else if (args[0] instanceof Reader)
+                in = IOUtils.toInputStream(IOUtils.toString((Reader) args[0]), UTF_8);
+            else
+                return null;
+
             var jt = (JavaType) args[1];
             var clazz = jt.getRawClass();
             if (List.class.isAssignableFrom(clazz))
