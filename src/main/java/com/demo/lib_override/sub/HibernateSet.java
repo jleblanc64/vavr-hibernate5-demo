@@ -10,7 +10,7 @@ import static com.demo.functional.OptionF.o;
 import static com.demo.lib_override.FieldMocked.getRefl;
 import static com.demo.lib_override.OverrideLibs.mSelf;
 
-public class SpringSet {
+public class HibernateSet {
     public static void override() {
         mSelf(SetterFieldImpl.class, "set", argsS -> {
             var args = argsS.args;

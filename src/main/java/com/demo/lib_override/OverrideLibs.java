@@ -3,9 +3,9 @@ package com.demo.lib_override;
 import com.demo.functional.Functor;
 import com.demo.functional.ListF;
 import com.demo.lib_override.sub.Jackson;
-import com.demo.lib_override.sub.SpringGet;
-import com.demo.lib_override.sub.SpringSet;
-import com.demo.lib_override.sub.SpringType;
+import com.demo.lib_override.sub.HibernateGet;
+import com.demo.lib_override.sub.HibernateSet;
+import com.demo.lib_override.sub.HibernateType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.SneakyThrows;
@@ -158,9 +158,9 @@ public class OverrideLibs {
                 overridden = true;
         }
 
-        SpringGet.override();
-        SpringSet.override();
-        SpringType.override();
+        HibernateGet.override();
+        HibernateSet.override();
+        HibernateType.override();
         Jackson.override();
 
         // fill nameToMethod

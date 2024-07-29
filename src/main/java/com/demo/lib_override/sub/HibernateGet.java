@@ -11,7 +11,7 @@ import java.util.Optional;
 import static com.demo.lib_override.FieldMocked.getRefl;
 import static com.demo.lib_override.OverrideLibs.mSelf;
 
-public class SpringGet {
+public class HibernateGet {
     public static void override() {
         mSelf(GetterFieldImpl.class, "get", argsS -> {
             var args = argsS.args;

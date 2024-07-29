@@ -10,7 +10,7 @@ import static com.demo.lib_override.FieldMocked.getRefl;
 import static com.demo.lib_override.FieldMocked.getReflL;
 import static com.demo.lib_override.OverrideLibs.mSelf;
 
-public class SpringType {
+public class HibernateType {
     public static void override() {
         mSelf(SimpleValue.class, "getType", argsS -> {
             var self = argsS.self;
