@@ -15,13 +15,12 @@
 
     <properties>
         <java.version>11</java.version>
-        <bytebuddy.version>1.14.12</bytebuddy.version>
     </properties>
     <dependencies>
         <dependency>
             <groupId>io.github.jleblanc64</groupId>
             <artifactId>lib-custom</artifactId>
-            <version>1.0.2</version>
+            <version>1.0.3</version>
         </dependency>
 
         <dependency>
@@ -68,16 +67,6 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>net.bytebuddy</groupId>
-            <artifactId>byte-buddy</artifactId>
-            <version>${bytebuddy.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>net.bytebuddy</groupId>
-            <artifactId>byte-buddy-agent</artifactId>
-            <version>${bytebuddy.version}</version>
         </dependency>
 
         <dependency>
