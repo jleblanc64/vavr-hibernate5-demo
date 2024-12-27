@@ -1,13 +1,13 @@
 package com.demo;
 
+import com.demo.dto.CustomerDtoReqSub;
+import com.demo.dto.CustomerDtoResp;
+import com.demo.repo.CustomerRepository;
+import io.vavr.collection.List;
+import io.vavr.control.Option;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-
-import javax.validation.Valid;
-import java.util.List;
-
-import static com.demo.functional.ListF.f;
 
 @RestController
 @RequestMapping("/customers")
@@ -17,26 +17,27 @@ public class CustomerController {
     CustomerRepository customerRepository;
 
     @GetMapping
-    public List<CustomerDtoResp> getCustomers() {
-        return f(customerRepository.findAll()).map(CustomerDtoResp::new);
+    public List<CustomerDtoResp> getCustomers(@RequestParam(required = false) Option<String> city) {
+        var customers = city.fold(customerRepository::findAllF, customerRepository::findAllByCity);
+        return customers.map(CustomerDtoResp::new);
     }
 
     @PostMapping
-    public CustomerDtoResp createCustomer(@Valid @RequestBody CustomerDtoReq customer) {
-        var c = customerRepository.save(customer.toCustomer());
-        return new CustomerDtoResp(c);
+    public CustomerDtoResp createCustomer(@RequestBody CustomerDtoReqSub customer) {
+        var cust = customerRepository.save(customer.toEntity());
+        return new CustomerDtoResp(cust);
     }
 
     @GetMapping("/{id}")
     public CustomerDtoResp getCustomerById(@PathVariable(value = "id") Long customerId) {
-        var c = customerRepository.findById(customerId).orElseThrow(NotFoundException::new);
-        return new CustomerDtoResp(c);
+        var cust = customerRepository.findByIdF(customerId).getOrElseThrow(NotFoundException::new);
+        return new CustomerDtoResp(cust);
     }
 
     @DeleteMapping("/{id}")
     public void deleteCustomer(@PathVariable(value = "id") Long customerId) {
-        Customer customer = customerRepository.findById(customerId).orElseThrow(NotFoundException::new);
-        customerRepository.delete(customer);
+        var cust = customerRepository.findByIdF(customerId).getOrElseThrow(NotFoundException::new);
+        customerRepository.delete(cust);
     }
 
     @ResponseStatus(value = HttpStatus.NOT_FOUND)
