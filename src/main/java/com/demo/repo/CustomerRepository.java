@@ -10,6 +10,8 @@ import org.springframework.stereotype.Repository;
 public interface CustomerRepository extends JpaRepository<Customer, Long> {
     List<Customer> findAllByCity(String city);
 
+    Option<Customer> findByName(String name);
+
     default List<Customer> findAllF() {
         return List.ofAll(findAll());
     }

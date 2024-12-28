@@ -34,6 +34,12 @@ public class CustomerController {
         return new CustomerDtoResp(cust);
     }
 
+    @GetMapping("/by-name")
+    CustomerDtoResp getCustomerByName(@RequestParam String name) {
+        var cust = customerRepository.findByName(name).getOrElseThrow(NotFoundException::new);
+        return new CustomerDtoResp(cust);
+    }
+
     @DeleteMapping("/{id}")
     public void deleteCustomer(@PathVariable(value = "id") Long customerId) {
         var cust = customerRepository.findByIdF(customerId).getOrElseThrow(NotFoundException::new);

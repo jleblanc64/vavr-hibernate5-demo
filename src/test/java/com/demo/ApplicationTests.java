@@ -62,6 +62,14 @@ public class ApplicationTests {
         var orders = respJ.getJSONArray("orders");
         assertEquals(0, orders.length());
 
+        // GET by name
+        resp = cli.getForObject(url + "/by-name?name=a", String.class);
+        respJ = new JSONObject(resp);
+        assertEquals("a", respJ.get("name"));
+
+        var httpCode = cli.getForEntity(url + "/by-name?name=b", String.class).getStatusCodeValue();
+        assertThat(httpCode).isEqualTo(404);
+
         // LIST
         resp = cli.getForObject(url, String.class);
         var respJa = new JSONArray(resp);
@@ -79,7 +87,7 @@ public class ApplicationTests {
         assertEquals(0, respJa.length());
 
         // GET by ID should respond 404 NOT FOUND
-        int httpCode = cli.getForEntity(url + "/" + id, String.class).getStatusCodeValue();
+        httpCode = cli.getForEntity(url + "/" + id, String.class).getStatusCodeValue();
         assertThat(httpCode).isEqualTo(404);
 
         // empty name
