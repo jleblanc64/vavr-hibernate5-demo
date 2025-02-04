@@ -15,8 +15,8 @@ import java.util.List;
 public class WebMvcConfig implements WebMvcConfigurer {
     @Override
     public void extendMessageConverters(List<HttpMessageConverter<?>> converters) {
-        VavrJackson2.override(converters);
-        VavrSpring6.override();
-        LibCustom.load();
+//        VavrJackson2.override(converters);
+//        VavrSpring6.override();
+//        LibCustom.load();
     }
 }
