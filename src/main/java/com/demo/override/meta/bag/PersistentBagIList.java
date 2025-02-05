@@ -1,6 +1,7 @@
 package com.demo.override.meta.bag;
 
 import com.demo.override.duplicate.MyPersistentBag;
+import io.vavr.PartialFunction;
 import io.vavr.collection.List;
 import org.hibernate.engine.spi.SharedSessionContractImplementor;
 
@@ -19,26 +20,26 @@ public class PersistentBagIList extends MyPersistentBag implements List {
 
     @Override
     public Object head() {
-        return null;
+        return get(0);
     }
 
     @Override
     public int length() {
-        return 0;
+        return size();
     }
 
     @Override
     public List tail() {
-        return null;
+        return List.ofAll(bag).tail();
     }
 
     @Override
     public Object apply(Object o) {
-        return null;
+        return ((PartialFunction) List.ofAll(bag)).apply(o);
     }
 
     @Override
     public boolean isDefinedAt(Object value) {
-        return false;
+        return ((PartialFunction) List.ofAll(bag)).isDefinedAt(value);
     }
 }

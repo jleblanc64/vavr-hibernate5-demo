@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import static io.github.jleblanc64.libcustom.functional.Functor.print;
+
 @Getter
 @Setter
 @NoArgsConstructor

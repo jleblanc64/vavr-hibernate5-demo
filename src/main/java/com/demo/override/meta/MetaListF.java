@@ -17,7 +17,7 @@ public class MetaListF implements MetaList<List> {
 
     @Override
     public java.util.List toJava(List l) {
-        return l.toJavaList();
+        return l.asJava();
     }
 
     @Override
