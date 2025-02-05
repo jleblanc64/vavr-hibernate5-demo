@@ -3,8 +3,8 @@ package com.demo.override;
 import com.demo.override.duplicate.JavaXProperty;
 import com.demo.override.duplicate.MyCollectionType;
 import com.demo.override.meta.MetaList;
-import com.demo.override.meta.MetaOption;
 import io.github.jleblanc64.libcustom.LibCustom;
+import io.github.jleblanc64.libcustom.functional.ListF;
 import lombok.SneakyThrows;
 import org.hibernate.annotations.common.reflection.ReflectionManager;
 import org.hibernate.annotations.common.reflection.java.JavaXMember;
@@ -13,9 +13,12 @@ import org.hibernate.cfg.PropertyInferredData;
 import org.hibernate.cfg.annotations.BagBinder;
 import org.hibernate.cfg.annotations.CollectionBinder;
 import org.hibernate.engine.spi.SharedSessionContractImplementor;
+import org.hibernate.metamodel.model.domain.internal.PluralAttributeBuilder;
 import org.hibernate.type.BagType;
 import org.hibernate.type.CollectionType;
 
+import javax.persistence.metamodel.PluralAttribute;
+import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.Map;
@@ -26,7 +29,7 @@ import static com.demo.override.Utils.isOfType;
 
 public class OverrideHibernate {
     @SneakyThrows
-    public static void override(MetaList metaList, MetaOption metaOption, io.github.jleblanc64.libcustom.functional.ListF<Class<?>> models) {
+    public static void override(MetaList metaList) {
         var bagProvList = metaList.bag();
 
         LibCustom.modifyArg(org.hibernate.cfg.AnnotationBinder.class, "processElementAnnotations", 2, args -> {
@@ -35,11 +38,15 @@ public class OverrideHibernate {
             var type = (Type) getRefl(p, "type");
             var at = (AccessType) getRefl(pid, "defaultAccess");
             var rm = (ReflectionManager) getRefl(pid, "reflectionManager");
-            var j = JavaXProperty.of((JavaXMember) p, type, metaOption, metaList);
+            var j = JavaXProperty.of((JavaXMember) p, type, metaList);
 
-            if (type instanceof ParameterizedType && ((ParameterizedType) type).getRawType() == io.vavr.collection.List.class) {
-                var f = (java.lang.reflect.Field) j.getMember();
-                var jOver = JavaXProperty.of(f, type, j, metaOption, metaList);
+            if (!(type instanceof ParameterizedType))
+                return LibCustom.ORIGINAL;
+
+            var rawType = ((ParameterizedType) type).getRawType();
+            if (metaList.isSuperClassOf(rawType)) {
+                var f = (Field) j.getMember();
+                var jOver = JavaXProperty.of(f, type, j, metaList);
                 return new PropertyInferredData(pid.getDeclaringClass(), jOver, at.getType(), rm);
             }
 
@@ -49,7 +56,7 @@ public class OverrideHibernate {
         LibCustom.override(org.hibernate.metamodel.internal.AttributeFactory.class, "determineCollectionType", args -> {
             var clazz = (Class) args[0];
             if (metaList.isSuperClassOf(clazz))
-                return javax.persistence.metamodel.PluralAttribute.CollectionType.LIST;
+                return PluralAttribute.CollectionType.LIST;
 
             return LibCustom.ORIGINAL;
         });
@@ -59,7 +66,7 @@ public class OverrideHibernate {
 
             var collectionClass = (Class) getRefl(self, "collectionClass");
             var listAttrClass = Class.forName("org.hibernate.metamodel.model.domain.internal.ListAttributeImpl");
-            var constructor = listAttrClass.getDeclaredConstructor(org.hibernate.metamodel.model.domain.internal.PluralAttributeBuilder.class);
+            var constructor = listAttrClass.getDeclaredConstructor(PluralAttributeBuilder.class);
             constructor.setAccessible(true);
 
             if (metaList.isSuperClassOf(collectionClass))
@@ -75,18 +82,6 @@ public class OverrideHibernate {
 
             return collection;
         });
-
-        // in hibernate models, replace null with empty Option
-        for (var model : models)
-            for (var p : java.beans.Introspector.getBeanInfo(model).getPropertyDescriptors()) {
-
-                var m = p.getReadMethod();
-                if (m != null && metaOption.isSuperClassOf(m.getReturnType()))
-                    LibCustom.modifyReturn(model, m.getName(), argsR -> {
-                        var returned = argsR.returned;
-                        return returned == null ? metaOption.fromValue(null) : returned;
-                    });
-            }
 
         LibCustom.override(CollectionBinder.class, "getBinderFromBasicCollectionType", args ->
                 metaList.isSuperClassOf(args[0]) ? new BagBinder() : LibCustom.ORIGINAL);

@@ -10,7 +10,7 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.regex.Pattern;
 
-import static com.demo.override.hibernate.OverrideConverter.isEntity;
+import static com.demo.override.Utils.isEntity;
 import static io.github.jleblanc64.libcustom.functional.ListF.f;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;

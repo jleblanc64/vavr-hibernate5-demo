@@ -5,7 +5,10 @@ import com.demo.override.meta.WithClass;
 import lombok.SneakyThrows;
 import org.hibernate.persister.collection.AbstractCollectionPersister;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+
+import static io.github.jleblanc64.libcustom.functional.ListF.f;
 
 public class Utils {
     private static Class PERSISTENT_COLLECTION_CLASS = MyPersistentBag.class;
@@ -34,5 +37,9 @@ public class Utils {
             throw new RuntimeException("Output of IBagProvider implem must extend " + PERSISTENT_COLLECTION_CLASS.getName());
 
         return o;
+    }
+
+    public static boolean isEntity(Annotation[] annotations) {
+        return f(annotations).stream().anyMatch(a -> a instanceof javax.persistence.Entity);
     }
 }
