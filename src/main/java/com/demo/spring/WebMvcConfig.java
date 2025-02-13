@@ -1,6 +1,5 @@
 package com.demo.spring;
 
-import io.github.jleblanc64.libcustom.LibCustom;
 import io.github.jleblanc64.libcustom.custom.jackson.VavrJackson2;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.HttpMessageConverter;
@@ -15,6 +14,5 @@ public class WebMvcConfig implements WebMvcConfigurer {
     @Override
     public void extendMessageConverters(List<HttpMessageConverter<?>> converters) {
         VavrJackson2.override(converters);
-        LibCustom.load();
     }
 }
