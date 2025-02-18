@@ -1,10 +1,9 @@
-package com.demo.override.meta;
+package com.demo.implem;
 
-import com.demo.override.meta.bag.BagProviderOpt;
-import com.demo.override.meta.bag.IBagProvider;
+import com.demo.override.meta.MetaOption;
 import io.vavr.control.Option;
 
-public class MetaOptionF implements MetaOption<Option> {
+public class MetaOptionImpl implements MetaOption<Option> {
     @Override
     public Class<Option> monadClass() {
         return Option.class;
@@ -21,10 +20,5 @@ public class MetaOptionF implements MetaOption<Option> {
             return null;
 
         return ((Option) o).getOrNull();
-    }
-
-    @Override
-    public IBagProvider<? extends Option> bag() {
-        return new BagProviderOpt();
     }
 }

@@ -1,10 +1,9 @@
 package com.demo.override;
 
 import com.demo.override.duplicate.JavaXProperty;
-import com.demo.override.duplicate.MyCollectionType;
 import com.demo.override.meta.MetaList;
+import com.sympheny.app.hibernate.override.duplicate.MyCollectionType;
 import io.github.jleblanc64.libcustom.LibCustom;
-import io.github.jleblanc64.libcustom.functional.ListF;
 import lombok.SneakyThrows;
 import org.hibernate.annotations.common.reflection.ReflectionManager;
 import org.hibernate.annotations.common.reflection.java.JavaXMember;
@@ -14,6 +13,7 @@ import org.hibernate.cfg.annotations.BagBinder;
 import org.hibernate.cfg.annotations.CollectionBinder;
 import org.hibernate.engine.spi.SharedSessionContractImplementor;
 import org.hibernate.metamodel.model.domain.internal.PluralAttributeBuilder;
+import org.hibernate.persister.collection.AbstractCollectionPersister;
 import org.hibernate.type.BagType;
 import org.hibernate.type.CollectionType;
 
@@ -23,11 +23,10 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.Map;
 
-import static com.demo.override.FieldMocked.getRefl;
-import static com.demo.override.Utils.checkPersistentBag;
-import static com.demo.override.Utils.isOfType;
+import static com.demo.override.Utils.*;
 
-public class OverrideHibernate {
+public class OverrideHibernateList {
+
     @SneakyThrows
     public static void override(MetaList metaList) {
         var bagProvList = metaList.bag();
@@ -38,7 +37,7 @@ public class OverrideHibernate {
             var type = (Type) getRefl(p, "type");
             var at = (AccessType) getRefl(pid, "defaultAccess");
             var rm = (ReflectionManager) getRefl(pid, "reflectionManager");
-            var j = JavaXProperty.of((JavaXMember) p, type, metaList);
+            var j = JavaXProperty.of((JavaXMember) p, type, null, metaList);
 
             if (!(type instanceof ParameterizedType))
                 return LibCustom.ORIGINAL;
@@ -46,7 +45,7 @@ public class OverrideHibernate {
             var rawType = ((ParameterizedType) type).getRawType();
             if (metaList.isSuperClassOf(rawType)) {
                 var f = (Field) j.getMember();
-                var jOver = JavaXProperty.of(f, type, j, metaList);
+                var jOver = JavaXProperty.of(f, type, j, null, metaList);
                 return new PropertyInferredData(pid.getDeclaringClass(), jOver, at.getType(), rm);
             }
 
@@ -90,7 +89,7 @@ public class OverrideHibernate {
             if (args.length == 1)
                 return LibCustom.ORIGINAL;
 
-            var pers = (org.hibernate.persister.collection.AbstractCollectionPersister) args[1];
+            var pers = (AbstractCollectionPersister) args[1];
             if (isOfType(pers, metaList))
                 return checkPersistentBag(bagProvList.of((SharedSessionContractImplementor) args[0]));
 

@@ -1,20 +1,18 @@
-package com.demo.override.meta.bag;
+package com.demo.implem;
 
-import com.demo.override.duplicate.MyPersistentBag;
+import com.sympheny.app.hibernate.override.duplicate.MyPersistentBag;
 import io.vavr.PartialFunction;
 import io.vavr.collection.List;
 import org.hibernate.engine.spi.SharedSessionContractImplementor;
 
 import java.util.Collection;
 
-public class PersistentBagIList extends MyPersistentBag implements List {
-
-    @Deprecated
-    public PersistentBagIList(SharedSessionContractImplementor session) {
+public class PersistentBagImpl extends MyPersistentBag implements io.vavr.collection.List {
+    public PersistentBagImpl(SharedSessionContractImplementor session) {
         super(session);
     }
 
-    public PersistentBagIList(SharedSessionContractImplementor session, Collection coll) {
+    public PersistentBagImpl(SharedSessionContractImplementor session, Collection coll) {
         super(session, coll);
     }
 

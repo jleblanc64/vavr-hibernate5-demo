@@ -9,7 +9,7 @@ import org.springframework.core.convert.support.GenericConversionService;
 import java.util.ArrayList;
 import java.util.Collection;
 
-public class OverrideSpring {
+public class OverrideSpringList {
     @SneakyThrows
     public static void override(MetaList metaList) {
         LibCustom.override(GenericConversionService.class, "convert", args -> {

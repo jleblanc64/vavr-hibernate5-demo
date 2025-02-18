@@ -1,14 +1,18 @@
 package com.demo.override;
 
-import com.demo.override.duplicate.MyPersistentBag;
 import com.demo.override.meta.WithClass;
+import com.sympheny.app.hibernate.override.duplicate.MyPersistentBag;
+import io.github.jleblanc64.libcustom.functional.ListF;
 import lombok.SneakyThrows;
 import org.hibernate.persister.collection.AbstractCollectionPersister;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.util.Arrays;
+import java.util.regex.Pattern;
 
 import static io.github.jleblanc64.libcustom.functional.ListF.f;
+import static org.reflections.ReflectionUtils.getAllFields;
 
 public class Utils {
     private static Class PERSISTENT_COLLECTION_CLASS = MyPersistentBag.class;
@@ -40,6 +44,51 @@ public class Utils {
     }
 
     public static boolean isEntity(Annotation[] annotations) {
-        return f(annotations).stream().anyMatch(a -> a instanceof javax.persistence.Entity);
+        return Arrays.stream(annotations).anyMatch(a -> a instanceof javax.persistence.Entity);
+    }
+
+    public static Object getRefl(Object o, String field) {
+        var f = findField(o.getClass(), field);
+        return getRefl(o, f);
+    }
+
+    private static Field findField(Class<?> clazz, String field) {
+        var currentClass = clazz;
+        while (currentClass != null) {
+            var found = f(currentClass.getDeclaredFields()).findSafe(f -> f.getName().equals(field));
+            if (found != null)
+                return found;
+
+            currentClass = currentClass.getSuperclass();
+        }
+
+        return null;
+    }
+
+    @SneakyThrows
+    public static Object getRefl(Object o, Field f) {
+        f.setAccessible(true);
+        return f.get(o);
+    }
+
+    @SneakyThrows
+    public static void setRefl(Object o, Field f, Object value) {
+        f.setAccessible(true);
+        f.set(o, value);
+    }
+
+    public static ListF<Field> fields(Object o) {
+        return f(getAllFields(o.getClass()));
+    }
+
+    @SneakyThrows
+    public static Class<?> paramClass(String clazz) {
+        return Class.forName(regex0(clazz, "(?<=\\<).*(?=\\>)"));
+    }
+
+    private static String regex0(String s, String pattern) {
+        var matcher = Pattern.compile(pattern).matcher(s);
+        matcher.find();
+        return matcher.group(0);
     }
 }

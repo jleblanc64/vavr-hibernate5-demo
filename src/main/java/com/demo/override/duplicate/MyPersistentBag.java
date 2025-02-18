@@ -1,4 +1,4 @@
-package com.demo.override.duplicate;
+package com.sympheny.app.hibernate.override.duplicate;
 
 import org.hibernate.HibernateException;
 import org.hibernate.collection.internal.AbstractPersistentCollection;
@@ -59,11 +59,11 @@ public class MyPersistentBag extends AbstractPersistentCollection {
     public MyPersistentBag(SharedSessionContractImplementor session, Collection coll) {
         super(session);
         providedCollection = coll;
-//        if (coll instanceof List) {
-//            bag = (List) coll;
-//        } else {
+        if (coll instanceof List) {
+            bag = (List) coll;
+        } else {
             bag = new ArrayList(coll);
-//        }
+        }
         setInitialized();
         setDirectlyAccessible(true);
     }

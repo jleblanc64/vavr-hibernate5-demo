@@ -1,4 +1,4 @@
-package com.demo.override.duplicate;
+package com.sympheny.app.hibernate.override.duplicate;
 
 import lombok.SneakyThrows;
 

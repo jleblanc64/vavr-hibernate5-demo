@@ -1,7 +1,8 @@
 package com.demo.override.duplicate;
 
-import com.demo.override.FieldMocked;
+import com.demo.override.Utils;
 import com.demo.override.meta.MetaList;
+import com.demo.override.meta.MetaOption;
 import io.github.jleblanc64.libcustom.functional.ListF;
 import lombok.SneakyThrows;
 import org.hibernate.annotations.common.reflection.XClass;
@@ -16,7 +17,7 @@ import java.lang.reflect.Member;
 import java.lang.reflect.Type;
 import java.util.List;
 
-import static com.demo.override.FieldMocked.getRefl;
+import static com.demo.override.Utils.getRefl;
 import static com.demo.override.Utils.isEntity;
 import static io.github.jleblanc64.libcustom.functional.ListF.f;
 
@@ -31,24 +32,24 @@ public class JavaXProperty extends JavaXMember implements XProperty {
     private XClass elementClass;
 
     @SneakyThrows
-    public static JavaXProperty of(JavaXMember m, Type type, MetaList metaList) {
-        return of(m, type, f(m.getAnnotations()), metaList);
+    public static JavaXProperty of(JavaXMember m, Type type, MetaOption metaOption, MetaList metaList) {
+        return of(m, type, f(m.getAnnotations()), metaOption, metaList);
     }
 
     @SneakyThrows
-    public static JavaXProperty of(Field f, Type type, JavaXProperty j, MetaList metaList) {
-        return new JavaXProperty(f, type, j.env, j.factory, j.annotations, metaList);
+    public static JavaXProperty of(Field f, Type type, JavaXProperty j, MetaOption metaOption, MetaList metaList) {
+        return new JavaXProperty(f, type, j.env, j.factory, j.annotations, metaOption, metaList);
     }
 
     @SneakyThrows
-    private static JavaXProperty of(JavaXMember m, Type type, List<Annotation> annotations, MetaList metaList) {
+    private static JavaXProperty of(JavaXMember m, Type type, List<Annotation> annotations, MetaOption metaOption, MetaList metaList) {
         var env = (TypeEnvironment) getRefl(m, "env");
-        return new JavaXProperty(m.getMember(), type, env, new JavaReflectionManager(), f(annotations), metaList);
+        return new JavaXProperty(m.getMember(), type, env, new JavaReflectionManager(), f(annotations), metaOption, metaList);
     }
 
     @SneakyThrows
     private JavaXProperty(Member member, Type type, TypeEnvironment env, JavaReflectionManager factory, ListF<Annotation> annotations,
-                          MetaList metaList) {
+                          MetaOption metaOption, MetaList metaList) {
         super(member, type, env, factory, factory.toXType(env, typeOf(member, env)));
 
         this.env = env;
@@ -65,8 +66,18 @@ public class JavaXProperty extends JavaXMember implements XProperty {
 
         // elementClass
         var typeS = getRefl(this, "type").toString();
-        if (typeS.startsWith(metaList.monadClass().getName() + "<")) {
-            var paramClass = FieldMocked.paramClass(typeS);
+        if (metaOption != null && typeS.startsWith(metaOption.monadClass().getName() + "<")) {
+
+            var paramClass = Utils.paramClass(typeS);
+            var clazzJavaXClass = Class.forName("org.hibernate.annotations.common.reflection.java.JavaXClass");
+            constructor = clazzJavaXClass.getDeclaredConstructor(Class.class, TypeEnvironment.class, JavaReflectionManager.class);
+            constructor.setAccessible(true);
+
+            isCollection = isEntity(paramClass.getDeclaredAnnotations());
+            collectionClass = metaOption.monadClass();
+            elementClass = (XClass) constructor.newInstance(paramClass, env, factory);
+        } else if (metaList != null && typeS.startsWith(metaList.monadClass().getName() + "<")) {
+            var paramClass = Utils.paramClass(typeS);
             var clazzJavaXClass = Class.forName("org.hibernate.annotations.common.reflection.java.JavaXClass");
             constructor = clazzJavaXClass.getDeclaredConstructor(Class.class, TypeEnvironment.class, JavaReflectionManager.class);
             constructor.setAccessible(true);
@@ -90,23 +101,6 @@ public class JavaXProperty extends JavaXMember implements XProperty {
     @Override
     public XClass getElementClass() {
         return elementClass;
-    }
-
-    public void addAnnotation(Annotation a) {
-        annotations.add(a);
-    }
-
-    public void removeAnnotation(Class<?> clazz) {
-        var idx = -1;
-        for (var i = 0; i < annotations.size(); i++) {
-            var annotation = annotations.get(i);
-            var annotationString = "@" + clazz.getName() + "(";
-
-            if (annotation.toString().contains(annotationString))
-                idx = i;
-        }
-
-        annotations.remove(idx);
     }
 
     @Override
