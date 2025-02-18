@@ -5,6 +5,7 @@ import com.demo.implem.MetaOptionImpl;
 import com.demo.override.*;
 import com.zaxxer.hikari.HikariDataSource;
 import io.github.jleblanc64.libcustom.LibCustom;
+import io.github.jleblanc64.libcustom.custom.spring.VavrSpring6;
 import org.flywaydb.core.Flyway;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -37,6 +38,7 @@ public class DataSourceConfig {
         OverrideSpringOpt.override(metaOption);
         OverrideJackson.override(metaOption);
 
+        VavrSpring6.override();
         LibCustom.load();
 
         // Hikari

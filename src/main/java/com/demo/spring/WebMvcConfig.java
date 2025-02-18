@@ -1,8 +1,11 @@
 package com.demo.spring;
 
-import io.github.jleblanc64.libcustom.LibCustom;
-import io.github.jleblanc64.libcustom.custom.jackson.VavrJackson2;
-import io.github.jleblanc64.libcustom.custom.spring.VavrSpring6;
+import com.demo.implem.MetaListImpl;
+import com.demo.implem.MetaOptionImpl;
+import com.demo.override.jackson.UpdateOM;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.SneakyThrows;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -13,11 +16,15 @@ import java.util.List;
 @Configuration
 @EnableWebMvc
 public class WebMvcConfig implements WebMvcConfigurer {
+
+    @Autowired
+    ObjectMapper om;
+
+    @SneakyThrows
     @Override
     public void extendMessageConverters(List<HttpMessageConverter<?>> converters) {
-        VavrJackson2.override(converters);
-        VavrSpring6.override();
-
-        LibCustom.load();
+        var metaOption = new MetaOptionImpl();
+        var metaList = new MetaListImpl();
+        UpdateOM.update(om, converters, metaOption, metaList);
     }
 }
