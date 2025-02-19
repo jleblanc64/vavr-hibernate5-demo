@@ -2,10 +2,12 @@ package com.demo.spring;
 
 import com.demo.implem.MetaListImpl;
 import com.demo.implem.MetaOptionImpl;
-import com.demo.override.*;
 import com.zaxxer.hikari.HikariDataSource;
 import io.github.jleblanc64.libcustom.LibCustom;
-import io.github.jleblanc64.libcustom.custom.spring.VavrSpring6;
+import io.github.jleblanc64.libcustom.custom.hibernate.VavrHibernate5;
+import io.github.jleblanc64.libcustom.custom.jackson.VavrJackson;
+import io.github.jleblanc64.libcustom.custom.spring.VavrSpring;
+import lombok.SneakyThrows;
 import org.flywaydb.core.Flyway;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -24,6 +26,7 @@ public class DataSourceConfig {
     @Value("${spring.datasource.password}")
     String password;
 
+    @SneakyThrows
     @Bean
     public DataSource getDataSource() {
         // meta
@@ -31,14 +34,24 @@ public class DataSourceConfig {
         var metaList = new MetaListImpl();
 
         // override
-        OverrideHibernateList.override(metaList);
-        OverrideSpringList.override(metaList);
+        VavrHibernate5.override(metaList);
+        VavrSpring.override(metaList);
 
-        OverrideHibernateOpt.override(metaOption);
-        OverrideSpringOpt.override(metaOption);
-        OverrideJackson.override(metaOption);
+        VavrHibernate5.override(metaOption);
+        VavrSpring.override(metaOption);
+        VavrJackson.override(metaOption, metaList);
 
-        VavrSpring6.override();
+        // accept text/plain content-type as json
+        var httpHeadersClass = Class.forName("org.springframework.http.HttpHeaders");
+        var mediaTypeClass = Class.forName("org.springframework.http.MediaType");
+        LibCustom.modifyReturn(httpHeadersClass, "getContentType", argsR -> {
+            var mediaType = argsR.returned;
+            if (mediaType != null && mediaType.toString().toLowerCase().startsWith("text/plain"))
+                return mediaTypeClass.getMethod("parseMediaType", String.class).invoke(null, "application/json");
+
+            return mediaType;
+        });
+
         LibCustom.load();
 
         // Hikari

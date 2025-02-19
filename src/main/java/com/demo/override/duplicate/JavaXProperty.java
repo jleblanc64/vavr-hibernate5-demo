@@ -1,9 +1,9 @@
 package com.demo.override.duplicate;
 
 import com.demo.override.Utils;
-import com.demo.override.meta.MetaList;
-import com.demo.override.meta.MetaOption;
 import io.github.jleblanc64.libcustom.functional.ListF;
+import io.github.jleblanc64.libcustom.meta.MetaList;
+import io.github.jleblanc64.libcustom.meta.MetaOption;
 import lombok.SneakyThrows;
 import org.hibernate.annotations.common.reflection.XClass;
 import org.hibernate.annotations.common.reflection.XProperty;

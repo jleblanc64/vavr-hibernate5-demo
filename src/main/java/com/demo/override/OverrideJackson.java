@@ -1,7 +1,7 @@
 package com.demo.override;
 
-import com.demo.override.meta.MetaOption;
 import io.github.jleblanc64.libcustom.LibCustom;
+import io.github.jleblanc64.libcustom.meta.MetaOption;
 import org.springframework.http.converter.json.AbstractJackson2HttpMessageConverter;
 
 import static com.demo.override.Utils.*;

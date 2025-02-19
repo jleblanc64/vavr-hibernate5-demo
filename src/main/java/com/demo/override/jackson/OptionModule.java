@@ -1,10 +1,10 @@
 package com.demo.override.jackson;
 
-import com.demo.override.meta.MetaOption;
 import com.fasterxml.jackson.core.Version;
 import com.fasterxml.jackson.databind.Module;
 import com.fasterxml.jackson.databind.module.SimpleSerializers;
 import com.fasterxml.jackson.datatype.jdk8.PackageVersion;
+import io.github.jleblanc64.libcustom.meta.MetaOption;
 import lombok.AllArgsConstructor;
 
 // https://github.com/FasterXML/jackson-modules-java8/blob/2.13/datatypes/src/main/java/com/fasterxml/jackson/datatype/jdk8/Jdk8Module.java

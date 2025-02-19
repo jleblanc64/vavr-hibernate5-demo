@@ -1,7 +1,7 @@
 package com.demo.override;
 
-import com.demo.override.meta.MetaList;
 import io.github.jleblanc64.libcustom.LibCustom;
+import io.github.jleblanc64.libcustom.meta.MetaList;
 import lombok.SneakyThrows;
 import org.springframework.core.convert.TypeDescriptor;
 import org.springframework.core.convert.support.GenericConversionService;

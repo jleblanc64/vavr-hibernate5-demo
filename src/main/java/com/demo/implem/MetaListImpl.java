@@ -1,7 +1,7 @@
 package com.demo.implem;
 
-import com.demo.override.meta.BagProvider;
-import com.demo.override.meta.MetaList;
+import io.github.jleblanc64.libcustom.meta.BagProvider;
+import io.github.jleblanc64.libcustom.meta.MetaList;
 import io.vavr.collection.List;
 import org.hibernate.engine.spi.SharedSessionContractImplementor;
 

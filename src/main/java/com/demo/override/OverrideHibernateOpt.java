@@ -1,9 +1,9 @@
 package com.demo.override;
 
-import com.demo.override.meta.MetaOption;
 import io.github.jleblanc64.libcustom.LibCustom;
 import io.github.jleblanc64.libcustom.custom.utils.FieldCustomType;
 import io.github.jleblanc64.libcustom.custom.utils.TypeImpl;
+import io.github.jleblanc64.libcustom.meta.MetaOption;
 import lombok.SneakyThrows;
 
 import java.lang.reflect.Field;

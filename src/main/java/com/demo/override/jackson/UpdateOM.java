@@ -1,9 +1,9 @@
 package com.demo.override.jackson;
 
-import com.demo.override.meta.MetaList;
-import com.demo.override.meta.MetaOption;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
+import io.github.jleblanc64.libcustom.meta.MetaList;
+import io.github.jleblanc64.libcustom.meta.MetaOption;
 import lombok.SneakyThrows;
 import org.springframework.http.converter.HttpMessageConverter;
 

@@ -1,8 +1,8 @@
 package com.demo.override;
 
-import com.demo.override.meta.WithClass;
 import com.sympheny.app.hibernate.override.duplicate.MyPersistentBag;
 import io.github.jleblanc64.libcustom.functional.ListF;
+import io.github.jleblanc64.libcustom.meta.WithClass;
 import lombok.SneakyThrows;
 import org.hibernate.persister.collection.AbstractCollectionPersister;
 

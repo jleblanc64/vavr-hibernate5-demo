@@ -1,9 +1,9 @@
 package com.demo.override;
 
 import com.demo.override.duplicate.JavaXProperty;
-import com.demo.override.meta.MetaList;
 import com.sympheny.app.hibernate.override.duplicate.MyCollectionType;
 import io.github.jleblanc64.libcustom.LibCustom;
+import io.github.jleblanc64.libcustom.meta.MetaList;
 import lombok.SneakyThrows;
 import org.hibernate.annotations.common.reflection.ReflectionManager;
 import org.hibernate.annotations.common.reflection.java.JavaXMember;
