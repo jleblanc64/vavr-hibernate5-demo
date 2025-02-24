@@ -3,7 +3,7 @@ package com.demo.spring;
 import com.demo.implem.MetaListImpl;
 import com.demo.implem.MetaOptionImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.github.jleblanc64.libcustom.custom.jackson.deser.UpdateOM;
+import io.github.jleblanc64.hibernate5.jackson.deser.UpdateOM;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;

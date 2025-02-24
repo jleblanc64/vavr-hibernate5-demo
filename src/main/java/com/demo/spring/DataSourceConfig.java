@@ -3,10 +3,11 @@ package com.demo.spring;
 import com.demo.implem.MetaListImpl;
 import com.demo.implem.MetaOptionImpl;
 import com.zaxxer.hikari.HikariDataSource;
+import io.github.jleblanc64.hibernate5.hibernate.VavrHibernate5;
+import io.github.jleblanc64.hibernate5.jackson.VavrJackson;
+import io.github.jleblanc64.hibernate5.spring.VavrSpring;
 import io.github.jleblanc64.libcustom.LibCustom;
-import io.github.jleblanc64.libcustom.custom.hibernate.VavrHibernate5;
-import io.github.jleblanc64.libcustom.custom.jackson.VavrJackson;
-import io.github.jleblanc64.libcustom.custom.spring.VavrSpring;
+
 import lombok.SneakyThrows;
 import org.flywaydb.core.Flyway;
 import org.springframework.beans.factory.annotation.Value;
