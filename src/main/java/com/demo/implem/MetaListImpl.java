@@ -1,7 +1,7 @@
 package com.demo.implem;
 
-import io.github.jleblanc64.libcustom.meta.BagProvider;
-import io.github.jleblanc64.libcustom.meta.MetaList;
+import io.github.jleblanc64.hibernate5.meta.BagProvider;
+import io.github.jleblanc64.hibernate5.meta.MetaList;
 import io.vavr.collection.List;
 import org.hibernate.engine.spi.SharedSessionContractImplementor;
 

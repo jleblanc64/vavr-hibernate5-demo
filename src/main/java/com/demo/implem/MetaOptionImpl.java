@@ -1,6 +1,6 @@
 package com.demo.implem;
 
-import io.github.jleblanc64.libcustom.meta.MetaOption;
+import io.github.jleblanc64.hibernate5.meta.MetaOption;
 import io.vavr.control.Option;
 
 public class MetaOptionImpl implements MetaOption<Option> {
