@@ -7,7 +7,6 @@ import io.github.jleblanc64.hibernate5.hibernate.VavrHibernate5;
 import io.github.jleblanc64.hibernate5.jackson.VavrJackson;
 import io.github.jleblanc64.hibernate5.spring.VavrSpring;
 import io.github.jleblanc64.libcustom.LibCustom;
-
 import lombok.SneakyThrows;
 import org.flywaydb.core.Flyway;
 import org.springframework.beans.factory.annotation.Value;
@@ -30,17 +29,16 @@ public class DataSourceConfig {
     @SneakyThrows
     @Bean
     public DataSource getDataSource() {
-        // meta
-        var metaOption = new MetaOptionImpl();
         var metaList = new MetaListImpl();
+        var metaOption = new MetaOptionImpl();
 
-        // override
         VavrHibernate5.override(metaList);
         VavrSpring.override(metaList);
+        VavrJackson.override(metaList);
 
         VavrHibernate5.override(metaOption);
         VavrSpring.override(metaOption);
-        VavrJackson.override(metaOption, metaList);
+        VavrJackson.override(metaOption);
 
         OverrideContentType.override();
         LibCustom.load();
