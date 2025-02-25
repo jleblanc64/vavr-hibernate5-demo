@@ -31,11 +31,6 @@
 
         <dependency>
             <groupId>io.github.jleblanc64</groupId>
-            <artifactId>lib-custom</artifactId>
-            <version>1.0.10</version>
-        </dependency>
-        <dependency>
-            <groupId>io.github.jleblanc64</groupId>
             <artifactId>vavr-hibernate5</artifactId>
             <version>1.0.0</version>
         </dependency>
