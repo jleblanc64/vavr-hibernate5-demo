@@ -20,7 +20,6 @@ public class WebMvcConfig implements WebMvcConfigurer {
     @Autowired
     ObjectMapper om;
 
-    @SneakyThrows
     @Override
     public void extendMessageConverters(List<HttpMessageConverter<?>> converters) {
         var metaOption = new MetaOptionImpl();
