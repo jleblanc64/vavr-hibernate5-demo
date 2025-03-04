@@ -1,12 +1,7 @@
 package com.demo.spring;
 
-import com.demo.implem.MetaListImpl;
-import com.demo.implem.MetaOptionImpl;
 import com.zaxxer.hikari.HikariDataSource;
 import io.github.jleblanc64.hibernate5.hibernate.VavrHibernate5;
-import io.github.jleblanc64.hibernate5.jackson.VavrJackson;
-import io.github.jleblanc64.hibernate5.spring.VavrSpring;
-import io.github.jleblanc64.libcustom.LibCustom;
 import lombok.SneakyThrows;
 import org.flywaydb.core.Flyway;
 import org.springframework.beans.factory.annotation.Value;
@@ -29,19 +24,7 @@ public class DataSourceConfig {
     @SneakyThrows
     @Bean
     public DataSource getDataSource() {
-        var metaList = new MetaListImpl();
-        var metaOption = new MetaOptionImpl();
-
-        VavrHibernate5.override(metaList);
-        VavrSpring.override(metaList);
-        VavrJackson.override(metaList);
-
-        VavrHibernate5.override(metaOption);
-        VavrSpring.override(metaOption);
-        VavrJackson.override(metaOption);
-
-        OverrideContentType.override();
-        LibCustom.load();
+        VavrHibernate5.override();
 
         // Hikari
         var ds = new HikariDataSource();
