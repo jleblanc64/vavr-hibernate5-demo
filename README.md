@@ -89,4 +89,4 @@ public class Customer {
 
 ### 5) Run Spring boot tests showing that Hibernate 5 + Vavr works
 
-https://github.com/jleblanc64/hibernate5/blob/main/src/test/java/com/demo/ApplicationTests.java
+https://github.com/jleblanc64/vavr-hibernate5-demo/blob/main/src/test/java/com/demo/ApplicationTests.java
