@@ -1,6 +1,6 @@
-# Vavr + Spring + Hibernate 5 demo 
+# Vavr + Spring boot 2 + Hibernate 5 demo 
 
-### 1) Add Maven dependency to pom.xml
+### 1) Add dependency to pom.xml
 ```xml
 <dependency>
     <groupId>io.github.jleblanc64</groupId>
@@ -9,25 +9,26 @@
 </dependency>
 ```
 
-### 2) Load custom Hibernate code in early Spring function
+### 2) Add class ConfigInit
 ```java
-@Bean
-public DataSource getDataSource() {
-    var metaList = new MetaListImpl();
-    var metaOption = new MetaOptionImpl();
-    
-    VavrHibernate5.override(metaList);
-    VavrSpring.override(metaList);
-    VavrJackson.override(metaList);
-    
-    VavrHibernate5.override(metaOption);
-    VavrSpring.override(metaOption);
-    VavrJackson.override(metaOption);
+import io.github.jleblanc64.hibernate5.hibernate.VavrHibernate5;
+import org.springframework.context.ApplicationContextInitializer;
+import org.springframework.context.ConfigurableApplicationContext;
 
-    (...)
+public class ConfigInit implements ApplicationContextInitializer<ConfigurableApplicationContext> {
+    @Override
+    public void initialize(ConfigurableApplicationContext ctx) {
+        VavrHibernate5.override();
+    }
+}
 ```
 
-### 3) Load custom Jackson converters
+and register the class it in your `application.properties` file (replace `com.demo.spring` with your own package) :
+```
+context.initializer.classes=com.demo.spring.ConfigInit
+```
+
+### 3) Add class WebMvcConfig
 ```java
 @Configuration
 @EnableWebMvc
@@ -78,6 +79,6 @@ public class Customer {
 }
 ```
 
-### 5) Run tests showing that Hibernate 5 + Vavr code works
+### 5) Run Spring boot tests showing that Hibernate 5 + Vavr code works
 
 https://github.com/jleblanc64/hibernate5/blob/main/src/test/java/com/demo/ApplicationTests.java
