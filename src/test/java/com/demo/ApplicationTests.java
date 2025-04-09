@@ -142,5 +142,33 @@ public class ApplicationTests {
         resp = cli.getForObject(url + "/" + id, String.class);
         respJ = new JSONObject(resp);
         assertEquals("b", respJ.getJSONObject("membership").get("description"));
+
+        // delete orders by descriptions
+        url = "http://localhost:" + port + "/orders";
+
+        req = new HttpEntity<>("{\"descriptions\":[\"d\",\"d2\"]}");
+        resp = cli.postForObject(url, req, String.class);
+
+        orders = new JSONObject(resp).getJSONArray("descriptions");
+        descriptions = new HashSet<>();
+        for (var i = 0; i < orders.length(); i++)
+            descriptions.add(orders.getString(i));
+
+        assertEquals(Set.of("d", "d2"), descriptions);
+
+        // check that descriptions were removed
+        url = "http://localhost:" + port + "/customers";
+
+        resp = cli.getForObject(url, String.class);
+        var customers = new JSONArray(resp);
+        JSONObject nameA = null;
+        for (var i = 0; i < customers.length(); i++) {
+            var cust = customers.getJSONObject(i);
+            if ("a".equals(cust.getString("name")))
+                nameA = cust;
+        }
+
+        orders = nameA.getJSONArray("orders");
+        assertEquals(0, orders.length());
     }
 }
