@@ -170,5 +170,13 @@ public class ApplicationTests {
 
         orders = nameA.getJSONArray("orders");
         assertEquals(0, orders.length());
+
+        // delete empty descriptions should work
+        url = "http://localhost:" + port + "/orders";
+
+        req = new HttpEntity<>("{}");
+        resp = cli.postForObject(url, req, String.class);
+        respJ = new JSONObject(resp);
+        assertEquals(0, respJ.getJSONArray("descriptions").length());
     }
 }
