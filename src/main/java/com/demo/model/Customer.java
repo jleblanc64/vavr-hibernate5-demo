@@ -33,7 +33,4 @@ public class Customer {
 
     @ElementCollection(targetClass = String.class)
     private Set<String> tags = HashSet.of();
-
-//    @ElementCollection(targetClass = String.class)
-//    private List<String> tags = List.of();
 }

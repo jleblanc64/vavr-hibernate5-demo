@@ -20,9 +20,7 @@ public class CustomerDtoResp {
     private Option<String> city;
     private List<OrderDto> orders;
     private Option<MembershipDto> membership;
-
     private Set<String> tags;
-//private List<String> tags;
 
     public CustomerDtoResp(Customer c) {
         id = c.getId();

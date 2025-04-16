@@ -17,7 +17,6 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 import java.util.HashSet;
 import java.util.Set;
 
-import static io.github.jleblanc64.libcustom.functional.Functor.print;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -52,31 +51,30 @@ public class ApplicationTests {
         var respJ = new JSONObject(resp);
         var id = respJ.get("id");
 
-//        // GET by ID
-//        resp = cli.getForObject(url + "/" + id, String.class);
-//        respJ = new JSONObject(resp);
-//        assertEquals("a", respJ.get("name"));
-//        assertEquals(3, respJ.get("number"));
-//        assertEquals(3, respJ.get("numberOpt"));
-//        assertTrue(respJ.isNull("membership"));
-//        var tags = jaToSet(respJ.getJSONArray("tags"), String.class);
-//        assertEquals(Set.of("a", "b"), tags);
+        // GET by ID
+        resp = cli.getForObject(url + "/" + id, String.class);
+        respJ = new JSONObject(resp);
+        assertEquals("a", respJ.get("name"));
+        assertEquals(3, respJ.get("number"));
+        assertEquals(3, respJ.get("numberOpt"));
+        assertTrue(respJ.isNull("membership"));
+        var tags = jaToSet(respJ.getJSONArray("tags"), String.class);
+        assertEquals(Set.of("a", "b"), tags);
 
         var orders = respJ.getJSONArray("orders");
         assertEquals(0, orders.length());
 
-//        // GET by name
-//        resp = cli.getForObject(url + "/by-name?name=a", String.class);
-//        respJ = new JSONObject(resp);
-//        assertEquals("a", respJ.get("name"));
-//
-//        var httpCode = cli.getForEntity(url + "/by-name?name=b", String.class).getStatusCodeValue();
-//        assertThat(httpCode).isEqualTo(404);
+        // GET by name
+        resp = cli.getForObject(url + "/by-name?name=a", String.class);
+        respJ = new JSONObject(resp);
+        assertEquals("a", respJ.get("name"));
+
+        var httpCode = cli.getForEntity(url + "/by-name?name=b", String.class).getStatusCodeValue();
+        assertThat(httpCode).isEqualTo(404);
 
         // LIST
         resp = cli.getForObject(url, String.class);
         var respJa = new JSONArray(resp);
-        print(respJa);
         assertEquals(1, respJa.length());
 
         var resp0 = respJa.getJSONObject(0);
@@ -91,7 +89,7 @@ public class ApplicationTests {
         assertEquals(0, respJa.length());
 
         // GET by ID should respond 404 NOT FOUND
-       var httpCode = cli.getForEntity(url + "/" + id, String.class).getStatusCodeValue();
+        httpCode = cli.getForEntity(url + "/" + id, String.class).getStatusCodeValue();
         assertThat(httpCode).isEqualTo(404);
 
         // empty name

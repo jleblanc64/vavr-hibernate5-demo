@@ -19,7 +19,6 @@ public class CustomerDtoReq {
     private List<OrderDto> orders;
     private Option<MembershipDto> membership;
     private Set<String> tags = HashSet.of();
-//    private List<String> tags = List.of();
 
     public Customer toEntity() {
         var c = new Customer();

@@ -21,15 +21,11 @@ import org.hibernate.type.CollectionType;
 import org.hibernate.type.SetType;
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.core.convert.TypeDescriptor;
-import org.springframework.core.convert.support.GenericConversionService;
 
 import javax.persistence.metamodel.PluralAttribute;
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.Collection;
 
 import static io.github.jleblanc64.hibernate5.hibernate.Utils.getRefl;
 import static io.github.jleblanc64.hibernate5.hibernate.Utils.isOfType;
@@ -39,9 +35,6 @@ public class ConfigInit implements ApplicationContextInitializer<ConfigurableApp
     public void initialize(ConfigurableApplicationContext ctx) {
         var metaSet = new MetaImplSet();
         overrideCustom(metaSet);
-        overrideSpring(metaSet);
-//        LibCustom.load();
-
 
         VavrHibernate5.override();
     }
@@ -129,34 +122,6 @@ public class ConfigInit implements ApplicationContextInitializer<ConfigurableApp
             }
 
             return LibCustom.ORIGINAL;
-        });
-
-//        LibCustom.overrideWithSelf(CollectionType.class, "replaceElements", x -> {
-//            var args = x.args;
-//            var c = (CollectionType) x.self;
-//
-//            return MyCollectionType.replaceElements(args[0], args[1], args[2], (Map) args[3], (SharedSessionContractImplementor) args[4], c);
-//        });
-    }
-
-    @SneakyThrows
-    public static void overrideSpring(MetaList metaList) {
-        LibCustom.override(GenericConversionService.class, "convert", args -> {
-            if (args == null || args.length != 3)
-                return LibCustom.ORIGINAL;
-
-            if (!(args[2] instanceof TypeDescriptor))
-                return LibCustom.ORIGINAL;
-
-            var targetType = (TypeDescriptor) args[2];
-            if (!metaList.isSuperClassOf(targetType.getObjectType()))
-                return LibCustom.ORIGINAL;
-
-            var source = args[0];
-            if (!(source instanceof Collection))
-                return LibCustom.ORIGINAL;
-
-            return metaList.fromJava(new ArrayList<>((Collection) source));
         });
     }
 
