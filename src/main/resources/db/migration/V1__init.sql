@@ -18,3 +18,8 @@ create table orders (
  customer_id int NOT NULL,
  CONSTRAINT orders_customer_id_fk FOREIGN KEY (customer_id) REFERENCES customers (id)
 );
+
+create table customer_tags (
+    customer_id int not null,
+    tags varchar(255) not null
+);

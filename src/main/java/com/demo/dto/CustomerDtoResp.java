@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Set;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -18,6 +20,7 @@ public class CustomerDtoResp {
     private Option<String> city;
     private List<OrderDto> orders;
     private Option<MembershipDto> membership;
+    private Set<String> tags;
 
     public CustomerDtoResp(Customer c) {
         id = c.getId();
@@ -27,5 +30,6 @@ public class CustomerDtoResp {
         city = c.getCity();
         orders = c.getOrders().map(OrderDto::new);
         membership = c.getMembership().map(MembershipDto::new);
+        tags = c.getTags();
     }
 }

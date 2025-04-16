@@ -3,7 +3,12 @@ package com.demo.dto;
 import com.demo.model.Customer;
 import io.vavr.collection.List;
 import io.vavr.control.Option;
-import lombok.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -14,6 +19,7 @@ public class CustomerDtoReq {
     private Option<String> city;
     private List<OrderDto> orders;
     private Option<MembershipDto> membership;
+    private Set<String> tags = new HashSet<>();
 
     public Customer toEntity() {
         var c = new Customer();
@@ -22,6 +28,7 @@ public class CustomerDtoReq {
         c.setCity(city);
         c.setOrders(orders.map(x -> x.toEntity(c)));
         c.setMembership(membership.map(MembershipDto::toEntity));
+        c.setTags(tags);
 
         return c;
     }

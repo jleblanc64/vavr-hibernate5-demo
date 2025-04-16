@@ -46,7 +46,7 @@ public class ApplicationTests {
         var url = "http://localhost:" + port + "/customers";
 
         // POST customer
-        var req = new HttpEntity<>("{\"name\":\"a\",\"number\":3}");
+        var req = new HttpEntity<>("{\"name\":\"a\",\"number\":3,\"tags\":[\"a\",\"b\"]}");
         var resp = cli.postForObject(url, req, String.class);
         var respJ = new JSONObject(resp);
         var id = respJ.get("id");
@@ -58,6 +58,8 @@ public class ApplicationTests {
         assertEquals(3, respJ.get("number"));
         assertEquals(3, respJ.get("numberOpt"));
         assertTrue(respJ.isNull("membership"));
+        var tags = jaToSet(respJ.getJSONArray("tags"), String.class);
+        assertEquals(Set.of("a", "b"), tags);
 
         var orders = respJ.getJSONArray("orders");
         assertEquals(0, orders.length());
@@ -178,5 +180,13 @@ public class ApplicationTests {
         resp = cli.postForObject(url, req, String.class);
         respJ = new JSONObject(resp);
         assertEquals(0, respJ.getJSONArray("descriptions").length());
+    }
+
+    static <T> Set<T> jaToSet(JSONArray ja, Class<T> clazz) {
+        var res = new HashSet<T>();
+        for (int i = 0; i < ja.length(); i++)
+            res.add((T) ja.get(i));
+
+        return res;
     }
 }
