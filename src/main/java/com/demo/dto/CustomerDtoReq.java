@@ -1,14 +1,13 @@
 package com.demo.dto;
 
 import com.demo.model.Customer;
+import io.vavr.collection.HashSet;
 import io.vavr.collection.List;
+import io.vavr.collection.Set;
 import io.vavr.control.Option;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.util.HashSet;
-import java.util.Set;
 
 @Getter
 @Setter
@@ -19,7 +18,8 @@ public class CustomerDtoReq {
     private Option<String> city;
     private List<OrderDto> orders;
     private Option<MembershipDto> membership;
-    private Set<String> tags = new HashSet<>();
+    private Set<String> tags = HashSet.of();
+//    private List<String> tags = List.of();
 
     public Customer toEntity() {
         var c = new Customer();

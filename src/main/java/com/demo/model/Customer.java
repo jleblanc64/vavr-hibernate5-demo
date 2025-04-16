@@ -1,13 +1,13 @@
 package com.demo.model;
 
+import io.vavr.collection.HashSet;
 import io.vavr.collection.List;
+import io.vavr.collection.Set;
 import io.vavr.control.Option;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.HashSet;
-import java.util.Set;
 
 @Getter
 @Setter
@@ -32,5 +32,8 @@ public class Customer {
     private Option<Membership> membership;
 
     @ElementCollection(targetClass = String.class)
-    private Set<String> tags = new HashSet<>();
+    private Set<String> tags = HashSet.of();
+
+//    @ElementCollection(targetClass = String.class)
+//    private List<String> tags = List.of();
 }

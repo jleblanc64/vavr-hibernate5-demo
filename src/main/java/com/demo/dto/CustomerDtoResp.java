@@ -2,12 +2,12 @@ package com.demo.dto;
 
 import com.demo.model.Customer;
 import io.vavr.collection.List;
+import io.vavr.collection.Set;
 import io.vavr.control.Option;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.Set;
 
 @Getter
 @Setter
@@ -20,7 +20,9 @@ public class CustomerDtoResp {
     private Option<String> city;
     private List<OrderDto> orders;
     private Option<MembershipDto> membership;
+
     private Set<String> tags;
+//private List<String> tags;
 
     public CustomerDtoResp(Customer c) {
         id = c.getId();
