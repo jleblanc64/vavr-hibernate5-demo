@@ -1,6 +1,5 @@
 package com.demo.model;
 
-import io.vavr.collection.HashSet;
 import io.vavr.collection.List;
 import io.vavr.collection.Set;
 import io.vavr.control.Option;
@@ -32,5 +31,5 @@ public class Customer {
     private Option<Membership> membership;
 
     @ElementCollection(targetClass = String.class)
-    private Set<String> tags = HashSet.of();
+    private Set<String> tags;
 }
