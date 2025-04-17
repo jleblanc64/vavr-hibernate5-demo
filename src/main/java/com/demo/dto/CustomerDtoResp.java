@@ -30,6 +30,6 @@ public class CustomerDtoResp {
         city = c.getCity();
         orders = c.getOrders().map(OrderDto::new);
         membership = c.getMembership().map(MembershipDto::new);
-        tags = c.getTags();
+        tags = c.getTags().map(x -> x + "2");
     }
 }

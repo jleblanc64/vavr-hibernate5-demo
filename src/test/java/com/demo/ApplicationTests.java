@@ -59,7 +59,7 @@ public class ApplicationTests {
         assertEquals(3, respJ.get("numberOpt"));
         assertTrue(respJ.isNull("membership"));
         var tags = jaToSet(respJ.getJSONArray("tags"), String.class);
-        assertEquals(Set.of("a", "b"), tags);
+        assertEquals(Set.of("a2", "b2"), tags);
 
         var orders = respJ.getJSONArray("orders");
         assertEquals(0, orders.length());
