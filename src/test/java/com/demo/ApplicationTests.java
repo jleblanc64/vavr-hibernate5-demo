@@ -180,6 +180,21 @@ public class ApplicationTests {
         resp = cli.postForObject(url, req, String.class);
         respJ = new JSONObject(resp);
         assertEquals(0, respJ.getJSONArray("descriptions").length());
+
+        // batch
+        url = "http://localhost:" + port + "/customers/batch";
+        req = new HttpEntity<>("[{\"name\":\"a\",\"number\":3,\"tags\":[\"a\",\"b\"]}]");
+        resp = cli.postForObject(url, req, String.class);
+        customers = new JSONArray(resp);
+        assertEquals(1, customers.length());
+        assertEquals("a", customers.getJSONObject(0).getString("name"));
+
+        url = "http://localhost:" + port + "/customers/batchJ";
+        req = new HttpEntity<>("[{\"name\":\"b\",\"number\":3,\"tags\":[\"a\",\"b\"]}]");
+        resp = cli.postForObject(url, req, String.class);
+        customers = new JSONArray(resp);
+        assertEquals(1, customers.length());
+        assertEquals("b", customers.getJSONObject(0).getString("name"));
     }
 
     static <T> Set<T> jaToSet(JSONArray ja, Class<T> clazz) {

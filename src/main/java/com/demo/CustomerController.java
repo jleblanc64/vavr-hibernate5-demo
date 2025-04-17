@@ -28,6 +28,16 @@ public class CustomerController {
         return new CustomerDtoResp(cust);
     }
 
+    @PostMapping("/batch")
+    public List<CustomerDtoResp> createCustomers(@RequestBody List<CustomerDtoReqSub> customers) {
+        return customers.map(this::createCustomer);
+    }
+
+    @PostMapping("/batchJ")
+    public List<CustomerDtoResp> createCustomers(@RequestBody java.util.List<CustomerDtoReqSub> customers) {
+        return List.ofAll(customers).map(this::createCustomer);
+    }
+
     @GetMapping("/{id}")
     public CustomerDtoResp getCustomerById(@PathVariable(value = "id") Long customerId) {
         var cust = customerRepository.findByIdF(customerId).getOrElseThrow(NotFoundException::new);
