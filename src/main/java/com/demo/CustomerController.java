@@ -6,20 +6,28 @@ import com.demo.repo.CustomerRepository;
 import io.vavr.collection.List;
 import io.vavr.control.Option;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/customers")
 public class CustomerController {
-
+    @Value("${array.prop}")
+    java.util.List<String> props;
     @Autowired
     CustomerRepository customerRepository;
+
 
     @GetMapping
     public List<CustomerDtoResp> getCustomers(@RequestParam(required = false) Option<String> city) {
         var customers = city.fold(customerRepository::findAllF, customerRepository::findAllByCity);
         return customers.map(CustomerDtoResp::new);
+    }
+
+    @GetMapping("/props")
+    public List<String> getProps() {
+        return List.ofAll(props);
     }
 
     @PostMapping

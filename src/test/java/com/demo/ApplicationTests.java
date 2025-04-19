@@ -195,6 +195,12 @@ public class ApplicationTests {
         customers = new JSONArray(resp);
         assertEquals(1, customers.length());
         assertEquals("b", customers.getJSONObject(0).getString("name"));
+
+        // props
+        url = "http://localhost:" + port + "/customers/props";
+        resp = cli.getForObject(url, String.class);
+        var props = jaToSet(new JSONArray(resp), String.class);
+        assertEquals(Set.of("a", "b", "c", "d"), props);
     }
 
     static <T> Set<T> jaToSet(JSONArray ja, Class<T> clazz) {
