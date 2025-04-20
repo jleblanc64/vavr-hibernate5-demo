@@ -14,10 +14,9 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/customers")
 public class CustomerController {
     @Value("${array.prop}")
-    java.util.List<String> props;
+    List<String> props;
     @Autowired
     CustomerRepository customerRepository;
-
 
     @GetMapping
     public List<CustomerDtoResp> getCustomers(@RequestParam(required = false) Option<String> city) {
@@ -27,7 +26,7 @@ public class CustomerController {
 
     @GetMapping("/props")
     public List<String> getProps() {
-        return List.ofAll(props);
+        return props;
     }
 
     @PostMapping
