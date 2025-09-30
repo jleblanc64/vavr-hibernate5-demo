@@ -1,5 +1,11 @@
 package com.demo;
 
+import com.demo.dto.CustomerDtoResp;
+import com.demo.dto.OrderDeleteDtoResp;
+import com.demo.dto.OrderDto;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import io.github.jleblanc64.hibernate5.jackson.deser.UpdateOM;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
@@ -15,6 +21,7 @@ import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -30,6 +37,11 @@ public class ApplicationTests {
 
     @Container
     static MySQLContainer<?> mysql = new MySQLContainer<>("mysql:8.0").withDatabaseName("database").withPassword("test").withPassword("test");
+    static ObjectMapper om = new ObjectMapper();
+
+    static {
+        UpdateOM.update(om, List.of());
+    }
 
     @DynamicPropertySource
     static void mysqlProperties(DynamicPropertyRegistry registry) {
@@ -102,16 +114,11 @@ public class ApplicationTests {
         // orders
         req = new HttpEntity<>("{\"name\":\"a\",\"orders\":[{\"description\":\"d\"},{\"description\":\"d2\"}]}");
         resp = cli.postForObject(url, req, String.class);
+        var cust = om.readValue(resp, CustomerDtoResp.class);
+        assertEquals(-10, cust.getNumber());
+        assertTrue(cust.getNumberOpt().isEmpty());
 
-        respJ = new JSONObject(resp);
-        assertEquals(-10, respJ.getInt("number"));
-        assertTrue(respJ.isNull("numberOpt"));
-
-        orders = respJ.getJSONArray("orders");
-        var descriptions = new HashSet<>();
-        for (var i = 0; i < orders.length(); i++)
-            descriptions.add(orders.getJSONObject(i).get("description"));
-
+        var descriptions = cust.getOrders().map(OrderDto::getDescription).toJavaSet();
         assertEquals(Set.of("d", "d2"), descriptions);
 
         // POST customers with city
@@ -150,28 +157,17 @@ public class ApplicationTests {
 
         req = new HttpEntity<>("{\"descriptions\":[\"d\",\"d2\"]}");
         resp = cli.postForObject(url, req, String.class);
-
-        orders = new JSONObject(resp).getJSONArray("descriptions");
-        descriptions = new HashSet<>();
-        for (var i = 0; i < orders.length(); i++)
-            descriptions.add(orders.getString(i));
-
-        assertEquals(Set.of("d", "d2"), descriptions);
+        var deleteResp = om.readValue(resp, OrderDeleteDtoResp.class);
+        assertEquals(Set.of("d", "d2"), deleteResp.getDescriptions().toJavaSet());
 
         // check that descriptions were removed
         url = "http://localhost:" + port + "/customers";
 
         resp = cli.getForObject(url, String.class);
-        var customers = new JSONArray(resp);
-        JSONObject nameA = null;
-        for (var i = 0; i < customers.length(); i++) {
-            var cust = customers.getJSONObject(i);
-            if ("a".equals(cust.getString("name")))
-                nameA = cust;
-        }
-
-        orders = nameA.getJSONArray("orders");
-        assertEquals(0, orders.length());
+        io.vavr.collection.List<CustomerDtoResp> custList = om.readValue(resp, new TypeReference<>() {
+        });
+        var customerA = custList.find(c -> c.getName().equals("a")).get();
+        assertTrue(customerA.getOrders().isEmpty());
 
         // delete empty descriptions should work
         url = "http://localhost:" + port + "/orders";
@@ -185,7 +181,7 @@ public class ApplicationTests {
         url = "http://localhost:" + port + "/customers/batch";
         req = new HttpEntity<>("[{\"name\":\"a\",\"number\":3,\"tags\":[\"a\",\"b\"]}]");
         resp = cli.postForObject(url, req, String.class);
-        customers = new JSONArray(resp);
+        var customers = new JSONArray(resp);
         assertEquals(1, customers.length());
         assertEquals("a", customers.getJSONObject(0).getString("name"));
 
