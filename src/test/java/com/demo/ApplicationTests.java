@@ -6,6 +6,7 @@ import com.demo.dto.OrderDto;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.jleblanc64.hibernate5.jackson.deser.UpdateOM;
+import io.vavr.collection.List;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
@@ -20,7 +21,6 @@ import org.testcontainers.containers.MySQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
-import java.util.List;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -39,7 +39,7 @@ public class ApplicationTests {
     static ObjectMapper om = new ObjectMapper();
 
     static {
-        UpdateOM.update(om, List.of());
+        UpdateOM.update(om, java.util.List.of());
     }
 
     @DynamicPropertySource
@@ -167,7 +167,7 @@ public class ApplicationTests {
         url = "http://localhost:" + port + "/customers";
 
         resp = cli.getForObject(url, String.class);
-        io.vavr.collection.List<CustomerDtoResp> custList = om.readValue(resp, new TypeReference<>() {
+        List<CustomerDtoResp> custList = om.readValue(resp, new TypeReference<>() {
         });
         var customerA = custList.find(c -> c.getName().equals("a")).get();
         assertTrue(customerA.getOrders().isEmpty());
@@ -198,7 +198,7 @@ public class ApplicationTests {
         // props
         url = "http://localhost:" + port + "/customers/props";
         resp = cli.getForObject(url, String.class);
-        io.vavr.collection.List<String> props = om.readValue(resp, new TypeReference<>() {
+        List<String> props = om.readValue(resp, new TypeReference<>() {
         });
         assertEquals(Set.of("a", "b", "c", "d"), props.toJavaSet());
     }
