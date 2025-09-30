@@ -20,7 +20,6 @@ import org.testcontainers.containers.MySQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -65,12 +64,16 @@ public class ApplicationTests {
 
         // GET by ID
         resp = cli.getForObject(url + "/" + id, String.class);
+        var cust = om.readValue(resp, CustomerDtoResp.class);
+        assertEquals("a", cust.getName());
+        assertEquals(3, cust.getNumber());
+        assertEquals(3, cust.getNumberOpt().get());
+
+        // check raw json
         respJ = new JSONObject(resp);
-        assertEquals("a", respJ.get("name"));
-        assertEquals(3, respJ.get("number"));
-        assertEquals(3, respJ.get("numberOpt"));
         assertTrue(respJ.isNull("membership"));
-        var tags = jaToSet(respJ.getJSONArray("tags"), String.class);
+
+        var tags = cust.getTags().toJavaSet();
         assertEquals(Set.of("a2", "b2"), tags);
 
         var orders = respJ.getJSONArray("orders");
@@ -114,7 +117,7 @@ public class ApplicationTests {
         // orders
         req = new HttpEntity<>("{\"name\":\"a\",\"orders\":[{\"description\":\"d\"},{\"description\":\"d2\"}]}");
         resp = cli.postForObject(url, req, String.class);
-        var cust = om.readValue(resp, CustomerDtoResp.class);
+        cust = om.readValue(resp, CustomerDtoResp.class);
         assertEquals(-10, cust.getNumber());
         assertTrue(cust.getNumberOpt().isEmpty());
 
@@ -195,15 +198,8 @@ public class ApplicationTests {
         // props
         url = "http://localhost:" + port + "/customers/props";
         resp = cli.getForObject(url, String.class);
-        var props = jaToSet(new JSONArray(resp), String.class);
-        assertEquals(Set.of("a", "b", "c", "d"), props);
-    }
-
-    static <T> Set<T> jaToSet(JSONArray ja, Class<T> clazz) {
-        var res = new HashSet<T>();
-        for (int i = 0; i < ja.length(); i++)
-            res.add((T) ja.get(i));
-
-        return res;
+        io.vavr.collection.List<String> props = om.readValue(resp, new TypeReference<>() {
+        });
+        assertEquals(Set.of("a", "b", "c", "d"), props.toJavaSet());
     }
 }
